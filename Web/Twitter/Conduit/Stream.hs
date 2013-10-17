@@ -31,14 +31,14 @@ rsrc $=+ cndt = do
   (src, finalizer) <- C.unwrapResumable rsrc
   return $ CI.ResumableSource (src C.$= cndt) finalizer
 
-userstream :: TwitterBaseM m => TW WithToken m (C.ResumableSource (TW WithToken m) StreamingAPI)
-userstream = do
-  rsrc <- api authRequired "GET" "https://userstream.twitter.com/2/user.json" []
+userstream :: TwitterBaseM m => HT.SimpleQuery -> TW WithToken m (C.ResumableSource (TW WithToken m) StreamingAPI)
+userstream query = do
+  rsrc <- api authRequired "GET" "https://userstream.twitter.com/1.1/user.json" query
   rsrc $=+ conduitFromJSON
 
 statusesFilter :: TwitterBaseM m => HT.SimpleQuery -> TW WithToken m (C.ResumableSource (TW WithToken m) StreamingAPI)
 statusesFilter query = do
-  rsrc <- api authRequired "GET" "https://stream.twitter.com/1/statuses/filter.json" query
+  rsrc <- api authRequired "POST" "https://stream.twitter.com/1.1/statuses/filter.json" query
   rsrc $=+ conduitFromJSON
 
 statusesSample :: TwitterBaseM m => HT.SimpleQuery -> TW WithToken m (C.ResumableSource (TW WithToken m) StreamingAPI)
