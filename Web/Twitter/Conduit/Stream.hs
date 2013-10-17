@@ -10,6 +10,7 @@ module Web.Twitter.Conduit.Stream
        -- * StreamingAPI
          userstream
        , statusesFilter
+       , statusesSample
   ) where
 
 import Web.Twitter.Conduit.Api
@@ -38,4 +39,9 @@ userstream = do
 statusesFilter :: TwitterBaseM m => HT.SimpleQuery -> TW WithToken m (C.ResumableSource (TW WithToken m) StreamingAPI)
 statusesFilter query = do
   rsrc <- api authRequired "GET" "https://stream.twitter.com/1/statuses/filter.json" query
+  rsrc $=+ conduitFromJSON
+
+statusesSample :: TwitterBaseM m => HT.SimpleQuery -> TW WithToken m (C.ResumableSource (TW WithToken m) StreamingAPI)
+statusesSample query = do
+  rsrc <- api authRequired "GET" "https://stream.twitter.com/1.1/statuses/sample.json" query
   rsrc $=+ conduitFromJSON
