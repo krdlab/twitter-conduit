@@ -47,6 +47,7 @@ library
     Web.Twitter.Conduit.Post
     Web.Twitter.Conduit.Param
     Web.Twitter.Conduit.Stream
+    Web.Twitter.Conduit.Search
     Web.Twitter.Conduit.Status
 
   other-modules:
